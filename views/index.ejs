@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Fritter, the Free Ritter</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body style="margin:25px 200px 0px">
+
+
+    <h1>Fritter, the Free Ritter</h1><br>
+
+
+    <div>
+      <% if(user){ %>
+        <p>Logged in as <%= user %></p>
+        <p><a href="logout">Logout</a></p>
+      <% }
+
+      else{ %>
+        <p><a href="login/">Login/Register</a></p>
+      <% } %>
+    </div>
+
+    <br><p><a href="freet/">Post a New Freet</a></p><br>
+
+    <div>
+
+      <% if(user == "admin"){ %>
+        <p><a href="clear/">Clear All Data</a></p><br>
+      <% } 
+
+      if(user && user != "admin") { %>
+        <table><tr><form method="post">
+          <td><button formaction="showAll">Show All Freets</button></td>
+          <td><button formaction="showFollowing">Show Only Following Freets</button></td>
+          <td><button formaction="showFavorites">Show Only Favorite Freets</button></td>
+        </form></tr></table><br>
+      <% } %>
+
+    </div>
+
+
+    <div>
+
+      <h1>List of <%= display ? display : "All" %> Freets:</h1>
+      <% var none_displayed = true;
+
+
+      for(var i=freets.length-1;i>-1;i--){
+        var freet = freets[i];
+
+        if(display_test(freet)){ 
+          none_displayed = false; %>
+
+          <p><%= freet.text %></p>
+
+          <% if(freet.user){ %>
+            <p>Author: <%= freet.user %></p>
+          <% } %>
+
+          <p><%= freet.timestamp %></p>
+
+
+          <div>
+            <form method="post">
+              <input value=<%=freet._id %> name="_id" hidden>
+              <input value=<%=freet.user %> name="follow" hidden>
+
+              <% if(user == 'admin' || (user && freet.user && user.toLowerCase() == freet.user.toLowerCase())) {  %>
+                <button formaction="freet/">Edit/Delete this Freet</button>
+              <% } %>
+
+
+              <% if(user && user != "admin") { %>
+                <% favorite_string = favorites_test(freet) ? "Unfavorite" : "Favorite" %>
+                <button formaction="favorites/"><%= favorite_string + ' this Freet' %></button>
+              <% } %>
+
+
+              <% if(user && user != "admin" && freet.user && freet.user.toLowerCase() != user.toLowerCase()){ %>
+                <% follow_string = follow_test(freet) ? "Unfollow " : "Follow " %>
+                <button formaction="follow/"><%= follow_string+freets[i].user %></button>
+              <% } %>
+
+
+              <br><br>
+            </form>
+          </div>
+
+
+        <% }
+       } 
+
+
+      if(none_displayed){ %><p>No freets to display</p><% } %>
+
+    </div>
+
+
+
+  </body>
+</html>

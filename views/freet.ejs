@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Freet</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+  </head>
+
+  <body>
+
+    <div>
+      <h1>Freet</h1>
+
+      <br><p><a href='../'>back to home page</a></p><br>
+
+      <% if(user){ %>
+        <p>Logged in as <%= user %></p>
+      <% } %>
+
+    </div>
+
+
+    <form method="post">
+
+      <input value=<%=_id %> name="_id" hidden>
+      <br><textarea maxlength="140" type="text" name="text" style="width:200px;height:6em"><%= _id ? text : "" %></textarea><br>
+      <button formaction="post"><%= _id ? 'Update Freet' : 'Post Freet' %></button>
+
+
+      <% if(_id){ %>
+        <button formaction="delete">Delete Freet</button>
+      <% } %>
+
+    </form>
+
+
+    <a href="/"><button>Cancel</button></a>
+
+    
+  </body>
+</html>
